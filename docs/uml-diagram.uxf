@@ -1,0 +1,32 @@
+<diagram program="umletino" version="15.0.0"><zoom_level>10</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>10</x><y>10</y><w>210</w><h>230</h></coordinates><panel_attributes>User
+--
++ id: integer
++ name: string
++ apellido: string
++ identification: string
++ direccion: string
++ additional_data: json
+--
++ get_nombres(id: int): string
++ get_apellidos(id: int): string
++ get_nombre_completo(id: int): string
++ get_direccion(id: int): string
++ set_password(string: int): boolean
++ set_nombres(string: int): boolean
++ set_apellidos(string: int): boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>360</x><y>10</y><w>210</w><h>230</h></coordinates><panel_attributes>Clave
+--
++ id: integer
++ user_id: integer
++ nivel_de_seguridad: string
++ password: string
++ next_change: string
++ additional_data: json
+--
++ get_next_change(id: int): date
++ get_nivel_de_seguridad(id: int): string
++ set_password(string: int): boolean
++ set_nombres(string: int): boolean
++ set_apellidos(string: int): boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>210</x><y>20</y><w>170</w><h>60</h></coordinates><panel_attributes>lt=-
+m1=1
+m2=1
+tiene una &gt;</panel_attributes><additional_attributes>10;20;70;20;150;40</additional_attributes></element></diagram>
