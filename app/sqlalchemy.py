@@ -6,7 +6,11 @@ def configure_sqlalchemy(settings):
     url = settings.get('sqlalchemy.url')
 
     try:
-      engine = create_engine(url, pool_pre_ping=True)
+      engine = create_engine(url, pool_pre_ping=True,
+                             pool_size=int(settings.get('sqlalchemy.pool_size')),
+                             max_overflow=int(settings.get('sqlalchemy.max_overflow')),
+                             pool_timeout=int(settings.get('sqlalchemy.pool_recycle'))
+      )
       engine.connect().execution_options(autocommit=True)
       print('Conexión exitosa')
     except SQLAlchemyError as e:

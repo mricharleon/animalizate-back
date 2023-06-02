@@ -1,10 +1,15 @@
 from pyramid.response import Response
 from pyramid.view import view_config
+from sqlalchemy import text
 
 
 # First view, available at http://localhost:6543/
 @view_config(route_name='home')
 def home(request):
+    sql = text('select * from tempresa')
+    result = request.dbsession.execute(sql)
+    for r in result:
+        print(r)
     return Response('<body>Visit <a href="/howdy">hello</a></body>')
 
 

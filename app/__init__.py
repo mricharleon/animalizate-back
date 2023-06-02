@@ -11,16 +11,13 @@ def hello_world(request):
 
 
 def on_new_request(event):
+    # metodo para setear el esquema, de acuerdo a la info del token
+    # en el token viene en sub del usuario y se consultaria en initdb el esquema
     # schema_name = _figire_out_schema_name_from_request(event.request)
     session = create_session(test)
+    event.request.dbsession = session
     schema_name = 'init'
     session.execute(text("SET search_path TO %s" % schema_name))
-    sql = text('select * from tempresa')
-    result = session.execute(sql)
-    for r in result:
-        print(r)
-    # session.close()
-    # session.get_bind().dispose()
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
