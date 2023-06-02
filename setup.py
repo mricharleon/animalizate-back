@@ -32,6 +32,7 @@ dev_requires = [
     'black==21.7b0',
     'waitress==2.1.2',
     'pyramid==2.0.1',
+    'psycopg2-binary==2.8.6',
 ]
 
 setup(

@@ -1,80 +1,80 @@
-from pyramid.config import Configurator
+# from pyramid.config import Configurator
 
-from sqlalchemy import engine_from_config, create_engine
-from sqlalchemy.orm import configure_mappers, sessionmaker
-from sqlalchemy.pool import NullPool
+# from sqlalchemy import engine_from_config, create_engine
+# from sqlalchemy.orm import configure_mappers, sessionmaker
+# from sqlalchemy.pool import NullPool
 
-import zope.sqlalchemy
+# import zope.sqlalchemy
 
-# run configure_mappers after defining all of the models to ensure
-# all relationships can be setup
-configure_mappers()
+# # run configure_mappers after defining all of the models to ensure
+# # all relationships can be setup
+# configure_mappers()
 
-def get_engine(settings, prefix='initdb.'):
-    return engine_from_config(settings, prefix)
-
-
-def get_session_factory(engine):
-    factory = sessionmaker()
-    factory.configure(bind=engine)
-    return factory
+# def get_engine(settings, prefix='initdb.'):
+#     return engine_from_config(settings, prefix)
 
 
-def get_tm_session(session_factory, transaction_manager):
-    """
-    Get a ``sqlalchemy.orm.Session`` instance backed by a transaction.
+# def get_session_factory(engine):
+#     factory = sessionmaker()
+#     factory.configure(bind=engine)
+#     return factory
 
-    This function will hook the session to the transaction manager which
-    will take care of committing any changes.
 
-    - When using pyramid_tm it will automatically be committed or aborted
-      depending on whether an exception is raised.
+# def get_tm_session(session_factory, transaction_manager):
+#     """
+#     Get a ``sqlalchemy.orm.Session`` instance backed by a transaction.
 
-    - When using scripts you should wrap the session in a manager yourself.
-      For example::
+#     This function will hook the session to the transaction manager which
+#     will take care of committing any changes.
 
-          import transaction
+#     - When using pyramid_tm it will automatically be committed or aborted
+#       depending on whether an exception is raised.
 
-          engine = get_engine(settings)
-          session_factory = get_session_factory(engine)
-          with transaction.manager:
-              dbsession = get_tm_session(session_factory, transaction.manager)
+#     - When using scripts you should wrap the session in a manager yourself.
+#       For example::
 
-    """
-    dbsession = session_factory()
-    zope.sqlalchemy.register(
-        dbsession, transaction_manager=transaction_manager)
-    return dbsession
+#           import transaction
 
-def crea_session(url=None, schemas=None):
+#           engine = get_engine(settings)
+#           session_factory = get_session_factory(engine)
+#           with transaction.manager:
+#               dbsession = get_tm_session(session_factory, transaction.manager)
 
-    settings = {'pyramid.includes': 'pyramid_debugtoolbar pyramid_tm'}
-    settings['tm.manager_hook'] = 'pyramid_tm.explicit_manager'
+#     """
+#     dbsession = session_factory()
+#     zope.sqlalchemy.register(
+#         dbsession, transaction_manager=transaction_manager)
+#     return dbsession
 
-    config = Configurator(settings=settings)
-    config.include('pyramid_tm')
-    config.include('pyramid_retry')
+# def crea_session(url=None, schemas=None):
 
-    engine = create_engine(url, poolclass=NullPool)
-    autocommit_engine = engine.execution_options(isolation_level="AUTOCOMMIT")
-    session_factory = get_session_factory(autocommit_engine)
-    config.registry['dbsession_factory'] = session_factory
-    config.add_request_method(
-        # r.tm is the transaction manager used by pyramid_tm
-        lambda r: get_tm_session(session_factory, r.tm),
-        'dbsession',
-        reify=True
-    )
+#     settings = {'pyramid.includes': 'pyramid_debugtoolbar pyramid_tm'}
+#     settings['tm.manager_hook'] = 'pyramid_tm.explicit_manager'
 
-    session = session_factory()
+#     config = Configurator(settings=settings)
+#     config.include('pyramid_tm')
+#     config.include('pyramid_retry')
 
-    if schemas is not None:  # Valida si hay cambios en nombre de esquemas
-        session.connection(
-            execution_options={
-                "schema_translate_map": schemas
-            })
+#     engine = create_engine(url, poolclass=NullPool)
+#     autocommit_engine = engine.execution_options(isolation_level="AUTOCOMMIT")
+#     session_factory = get_session_factory(autocommit_engine)
+#     config.registry['dbsession_factory'] = session_factory
+#     config.add_request_method(
+#         # r.tm is the transaction manager used by pyramid_tm
+#         lambda r: get_tm_session(session_factory, r.tm),
+#         'dbsession',
+#         reify=True
+#     )
 
-    return session
+#     session = session_factory()
+
+#     if schemas is not None:  # Valida si hay cambios en nombre de esquemas
+#         session.connection(
+#             execution_options={
+#                 "schema_translate_map": schemas
+#             })
+
+#     return session
 
 
 
