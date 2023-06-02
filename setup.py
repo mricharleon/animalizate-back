@@ -33,6 +33,7 @@ dev_requires = [
     'waitress==2.1.2',
     'pyramid==2.0.1',
     'psycopg2-binary==2.8.6',
+    'pyramid-tm==2.5',
 ]
 
 setup(
