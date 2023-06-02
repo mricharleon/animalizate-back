@@ -4,14 +4,19 @@ from sqlalchemy.exc import SQLAlchemyError
 
 def configure_sqlalchemy(settings):
     url = settings.get('sqlalchemy.url')
+    pool_size = int(settings.get('sqlalchemy.pool_size'))
+    max_overflow = int(settings.get('sqlalchemy.max_overflow'))
+    pool_timeout = int(settings.get('sqlalchemy.pool_timeout'))
+    pool_recycle = int(settings.get('sqlalchemy.pool_recycle'))
 
     try:
       engine = create_engine(
         url,
         pool_pre_ping=True,
-        pool_size=int(settings.get('sqlalchemy.pool_size')),
-        max_overflow=int(settings.get('sqlalchemy.max_overflow')),
-        pool_timeout=int(settings.get('sqlalchemy.pool_timeout'))
+        pool_size=pool_size,
+        max_overflow=max_overflow,
+        pool_recycle=pool_recycle,
+        pool_timeout=pool_timeout
       )
       engine.connect().execution_options(autocommit=True)
       print('Conexión exitosa')
