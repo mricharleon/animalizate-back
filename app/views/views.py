@@ -11,8 +11,8 @@ from app.core.decorators.generals import close_session
 def home(request):
     sql = text('select * from tempresa')
     result = request.dbsession.execute(sql)
-    for r in result:
-        print(r)
+    # for r in result:
+    #     print(r)
     return Response('<body>Visit <a href="/howdy">hello</a></body>')
 
 

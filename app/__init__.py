@@ -23,6 +23,14 @@ def on_new_request(event):
     schema_name = 'init'
     event.request.dbsession.execute(text("SET search_path TO %s" % schema_name))
 
+def on_new_response(event):
+    print('Sesion cerrada!')
+    if hasattr(event.request, 'dbsession'):
+        event.request.dbsession.close()
+        event.request.dbsession.get_bind().dispose()
+    else:
+        print('No existe dbsession en request!')
+
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
@@ -44,4 +52,5 @@ def main(global_config, **settings):
     config.scan('.views.views')
 
     config.add_subscriber(on_new_request, events.NewRequest)
+    config.add_subscriber(on_new_response, events.NewResponse)
     return config.make_wsgi_app()
