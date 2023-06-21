@@ -3,16 +3,25 @@ from pyramid.view import view_config
 from sqlalchemy import text
 
 from app.core.decorators.generals import close_session
+from app.models.shared.auth import Auth
 
 
 # First view, available at http://localhost:6543/
 @view_config(route_name='home')
 @close_session
 def home(request):
-    sql = text('select * from tempresa')
-    result = request.dbsession.execute(sql)
-    # for r in result:
-    #     print(r)
+    test = request.dbsession.query(Auth).filter_by(id=1)
+    print(test.scalar())
+    # spongebob = User(
+    #     name="bob",
+    #     last_name="sponge",
+    #     fullname="Spongebob Squarepants",
+    #     username="spongeuser",
+    #     addresses=[Address(email_address="spongebob@sqlalchemy.org")],
+    # )
+
+    # request.dbsession.add_all([spongebob])
+    # request.dbsession.commit()
     return Response('<body>Visit <a href="/howdy">hello</a></body>')
 
 

@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.exc import SQLAlchemyError
 
+
 def configure_sqlalchemy(settings):
     url = settings.get('sqlalchemy.url')
     pool_size = int(settings.get('sqlalchemy.pool_size'))

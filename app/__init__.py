@@ -20,7 +20,7 @@ def on_new_request(event):
     dbsession = create_session(event)
     event.request.dbsession = dbsession
 
-    schema_name = 'init'
+    schema_name = 'public'
     event.request.dbsession.execute(text("SET search_path TO %s" % schema_name))
 
 def on_new_response(event):
